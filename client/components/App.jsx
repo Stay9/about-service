@@ -13,84 +13,81 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      id: +props.id,
-      listingId: +props.listingId,
+      id: 5,
+      first_name: 'temp_name',
+      listingId: props.listingId,
       host: {},
+      joined_in_date: '12-3-1980',
       joinMonth: '',
       joinYear: '',
       numsOfReviews: 0,
       reviewWording: 'reviews',
       neighborhoodInfo: null,
+      city: 'tempCity',
+      state: 'tempState',
+      country: 'tempCountry',
+      description: 'tempDesc',
+      verified: false,
+      languages: 'templang',
+      response_rate: 1,
+      response_time: 1,
+      photo_url: null,
     };
 
-    this.verifiedOrNot = this.verifiedOrNot.bind(this);
     this.responseTimeConvertor = this.responseTimeConvertor.bind(this);
   }
 
   componentDidMount() {
     this.getHostInfo();
     this.getReviewInfo();
-    this.reviewOrReviews();
     this.getNeighborhoodInfo();
   }
 
   getHostInfo() {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-    $.get(`/api/about/hosts/${this.state.id}`, (data) => {
-      this.setState({ host: JSON.parse(data)[0] });
-      this.setState({ joinMonth: monthNames[Number(this.state.host.joined_in_date.split('-')[1]) - 1] });
-      this.setState({ joinYear: this.state.host.joined_in_date.split('-')[0] });
+    $.get(`http://localhost:3001/api/about/hosts/${this.state.id}`, (data) => {
+      data = JSON.parse(data);
+      data = data.rows[0];
+      this.setState({ verified: data.verified });
+      this.setState({ languages: data.languages });
+      this.setState({ id: data.id });
+      this.setState({ joinMonth: monthNames[Number(this.state.joined_in_date.split('-')[1]) - 1] });
+      this.setState({ joinYear: this.state.joined_in_date.split('-')[0] });
     });
   }
 
   getReviewInfo() {
-    $.get(`/api/about/reviews/${this.state.id}`, (data) => {
-      this.setState({ numsOfReviews: data });
+    $.get(`http://localhost:3001/api/about/reviews/${this.state.id}`, (data) => {
+      const formattedData = JSON.parse(data);
+      this.setState({ numsOfReviews: formattedData.rows[0].numReviews });
     });
   }
 
   getNeighborhoodInfo() {
-    $.get(`/api/about/neighborhood/${this.state.listingId}`, (data) => {
-      let neighborhoodInfo = JSON.parse(data);
-      let lon_location = neighborhoodInfo[0].lon_location;
-      let lat_location = neighborhoodInfo[0].lat_location;
-      // let location = {lon_location, lat_location};
-      this.setState({ neighborhoodInfo: neighborhoodInfo[0] });
+    $.get(`http://localhost:3001/api/about/listings/${this.state.listingId}`, (data) => {
+      const neighborhoodInfo = JSON.parse(data);
+      const lon_location = neighborhoodInfo.rows[0].lon_location;
+      const lat_location = neighborhoodInfo.rows[0].lat_location;
+      this.setState({ neighborhoodInfo: neighborhoodInfo[0], city: neighborhoodInfo.rows[0].city, state: neighborhoodInfo.rows[0].state, photo_url: neighborhoodInfo.rows[0].photo_url, description: neighborhoodInfo.rows[0].description });
     });
   }
 
-  reviewOrReviews() {
-    if (this.state.numsOfReviews <= 1) {
-      this.setState({ reviewWording: 'review' });
-    }
-  }
-
-  verifiedOrNot() {
-    if (this.state.host.verified === 1) {
-      return <span>Verified</span>
-    }
-  }
-
   responseTimeConvertor() {
-    if (this.state.host.response_time <= 59) {
-      return <span className="boldingWords">Within an hour</span>
+    if (this.state.response_time <= 59) {
+      return <span className="boldingWords">Within an hour</span>;
     }
+    return <span className="boldingWords">More than an hour</span>;
   }
 
   render() {
     return (
       <div>
-        <span styleName='title'>Hosted By {this.state.host.first_name}</span>
-        <span><img styleName='hostImg' src={`https://s3-us-west-1.amazonaws.com/dog-photos-bentley/${this.state.host.id}.jpeg`}/></span>
-        <HostInfo host={this.state.host} joinMonth={this.state.joinMonth} joinYear={this.state.joinYear} reviews={this.state.numsOfReviews} reviewWording={this.state.reviewWording} verifiedOrNot={this.verifiedOrNot}/>
-
-        <HostDescription host={this.state.host} responseTimeConvertor={this.responseTimeConvertor} />
+        <span styleName='title'>Hosted By {this.state.first_name}</span>
+        <span><img styleName='hostImg' src={this.state.photo_url}/></span>
+        <HostInfo city={this.state.city} state={this.state.state} joinMonth={this.state.joinMonth} joinYear={this.state.joinYear} reviews={this.state.numsOfReviews} reviewWording={this.state.reviewWording} verifiedOrNot={this.state.verified} />
+        <HostDescription response_rate={this.state.response_rate} resonse_time={this.state.response_time} description={this.state.description} host={this.state.host} city={this.state.city} state={this.state.state} country={this.state.country} responseTimeConvertor={this.responseTimeConvertor} languages={this.state.languages} />
         <ContactAirbnb />
         {this.state.neighborhoodInfo && <Neighborhood neighborhoodInfo={this.state.neighborhoodInfo} lat={this.state.neighborhoodInfo.lat_location } lng={this.state.neighborhoodInfo.lon_location} zoom='11' /> }
-
-
-
       </div>
     );
   }

@@ -1,51 +1,49 @@
-const connection = require('./connection.js');
+const callQuery = require('./connection.js').callQuery;
+
+const makeQuery = (searchBy, params, callback) => {
+  callQuery(searchBy, params, (res) => {
+    callback(res);
+  });
+};
 
 const selectHostInfo = (id, callback) => {
-  const theQuery = `select * from hosts where id = ${id}`;
-  connection.query(theQuery, (err, result) => {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, result);
-    }
-  });
+  const query = 'select verified, languages, join_in_date from hosts where id =?';
+  const params = [id];
+  makeQuery(query, params, callback);
+};
+
+const selectListingInfo = (id, callback) => {
+  const query = 'select lat_location, lon_location, city, state, photo_url, description from listings where id = ?';
+  const params = [id];
+  makeQuery(query, params, callback);
 };
 
 const reviewsForHost = (id, callback) => {
-  const theQuery = `select * from reviews where user_id = ${id}`;
-  connection.query(theQuery, (err, result) => {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, result.length);
-    }
-  });
+  const query = 'select numreviews, rating from reviews where id = ?';
+  const params = [id];
+  makeQuery(query, params, callback);
 };
 
 const neighborhoodInfo = (id, callback) => {
-  const theQuery = `select * from listings where id = ${id}`;
-  connection.query(theQuery, (err, result)=> {
-    if (err) {
-      console.log(err);
-    } else {
-      callback(null, result);
-    }
-  })
-}
-
-module.exports = {
-  selectHostInfo, reviewsForHost, neighborhoodInfo,
+  const query = 'select * from listings where id = ?';
+  const params = [id];
+  makeQuery(query, params, callback);
 };
 
-// selectHostInfo();
-// reviewsForHost((err, result) => {
-//   console.log(result.length);
-// });
+const postHost = (id, params, callback) => {
+  // Note: the params will be in order:
+  // id, city, country, first_name, joined_in_date, languages,
+  // last_name, photo_url, response_rate, response_time, state, verified
 
-// neighborhoodInfo(56, (err, result)=> {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log(result);
-//   }
-// });
+  const query = 'insert into hosts (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  makeQuery(query, params, callback);
+};
+
+const updateAvgReview = (id, params, callback) => {
+  const query = 'update reviews set rating = ? where id = ?';
+  makeQuery(query, params, callback);
+};
+
+module.exports = {
+  selectHostInfo, selectListingInfo, reviewsForHost, neighborhoodInfo, postHost, updateAvgReview,
+};
