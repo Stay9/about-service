@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "build": "webpack -d --watch",
-    "start": "node ./server/server.js"
+    "start": "node ./server/server.js",
+    "prod": "webpack --config webpack.prod.js"
   },
   "keywords": [],
   "author": "",
@@ -44,6 +45,7 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.11",
     "jest": "^22.4.4",
-    "style-loader": "^0.21.0"
+    "style-loader": "^0.21.0",
+    "webpack-merge": "^4.1.4"
   }
 }

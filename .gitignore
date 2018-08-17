@@ -2,3 +2,5 @@ node_modules
 client/config/googleMap.js
 newrelic.js
 /server/newrelic.js
+*.txt
+config.js
