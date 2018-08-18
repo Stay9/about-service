@@ -1,0 +1,19 @@
+
+config:
+  payload:
+    path: "../../../Documents/datastorage/highIdxData.csv"
+    fields:
+      - "num"
+  target: "http://localhost:3001"
+  phases:
+    - duration: 300
+      arrivalRate: 1
+      rampTo: 600
+      name: 'warm up'
+
+scenarios:
+  - flow:
+      - loop:
+          - get:
+              url: "/api/about/hosts/{{ num }}"
+        count: 750
