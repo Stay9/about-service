@@ -4,29 +4,37 @@ services:
   about-service:
     build: ./
     depends_on:
-      - 'database'
+      - redis
     ports:
-      - '3001:3001'
+      - 3001:3001
     restart: on-failure
-    # command: bash -c "sleep 10; node ./server.js"
-
- # db:
- #   build: db/
- #   image: mysql:5.7.23
- #   environment:
- #    - MYSQL_ROOT_PASSWORD=example
- #    - MYSQL_DATABASE=rental_hosts
- #    - MYSQL_USER=root
- #   ports:
- #     - '3306:3306'
-
-  database:
-    build: ./db/
-    image: mysql/mysql-server/5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=dog
-      - MYSQL_DATABASE=rental_hosts
-      - MYSQL_USER=root
-    ports:
-      - 3306:3306
+      - NODE_ENV=production
+
+  redis:
+      image: redis:4.0.5-alpine
+      command: ["redis-server", "--appendonly", "yes"]
+      hostname: redis
+      networks:
+        - redis-net
+      volumes:
+        - redis-data:/data
+
+
+networks:
+  redis-net:
+
+volumes:
+  redis-data:
+
+
+  # database:
+  #   build: ./db/
+  #   image: mysql/mysql-server/5.7
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=dog
+  #     - MYSQL_DATABASE=rental_hosts
+  #     - MYSQL_USER=root
+  #   ports:
+  #     - 3306:3306
 

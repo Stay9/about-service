@@ -218,6 +218,6 @@ const makeFavoredIds = (pathToFile) => {
   });
 };
 
-makeFavoredIds('/Users/henrygreen/Documents/datastorage/highIdxData.csv');
+// makeFavoredIds('/Users/henrygreen/Documents/datastorage/highIdxData.csv');
 
 

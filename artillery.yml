@@ -16,4 +16,4 @@ scenarios:
       - loop:
           - get:
               url: "/api/about/hosts/{{ num }}"
-        count: 750
+        count: 150
