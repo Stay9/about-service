@@ -5,7 +5,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const db = require('../db/queries.js');
+const redis = require('redis');
+const port = process.env.PORT || 3000;
 
+const client = redis.createClient();
+client.on('error', (err) => {
+  console.log("error", err);
+});
 
 if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
@@ -36,31 +42,66 @@ if (cluster.isMaster) {
   app.use(express.static(path.join(__dirname, '../public'), { maxAge: 3000 }));
 
   app.get('/api/about/hosts/:id', (req, res) => {
-    db.selectHostInfo(req.params.id, (result) => {
-      res.send(JSON.stringify(result));
+    client.get(req.params.id, (err, redires) => {
+      if (redires) {
+        const reply = JSON.stringify(redires);
+        res.send(reply);
+      } else {
+        db.selectHostInfo(req.params.id, (result) => {
+          let key = JSON.stringify(req.params.id);
+          let val = JSON.stringify(result);
+          client.setex(key, 60, val);
+          res.send(JSON.stringify(result));
+        });
+      }
     });
   });
 
   app.get('/api/about/reviews/:listingId', (req, res) => {
-    db.reviewsForHost(req.params.listingId, (result) => {
-      res.send(JSON.stringify(result));
+    const request = req.params.id;
+    client.get(request, (err, redires) => {
+      if (redires) {
+        const reply = JSON.stringify(redires);
+        res.send(reply);
+      } else {
+        db.reviewsForHost(req.params.listingId, (result) => {
+          const key = JSON.stringify(req.params.id);
+          const val = JSON.stringify(result);
+          client.setex(key, 60, val);
+          res.send(JSON.stringify(result));
+        });
+      }
     });
   });
 
   app.get('/api/about/neighborhood/:listingId', (req, res) => {
-    db.neighborhoodInfo(req.params.listingId, (err, result) => {
-      if (err) {
-        res.sendStatus(401);
+    const request = req.params.id;
+    client.get(request, (err, redires) => {
+      if (redires) {
+        const reply = JSON.stringify(redires);
+        res.send(reply);
       } else {
-        res.send(JSON.stringify(result));
+        db.neighborhoodInfo(req.params.listingId, (err, result) => {
+          const key = JSON.stringify(req.params.id);
+          const val = JSON.stringify(result);
+          client.setex(key, 60, val);
+          res.send(JSON.stringify(result));
+        });
       }
     });
   });
 
   app.get('/api/about/listings/:listId', (req, res) => {
     const id = req.params.listId;
-    db.selectListingInfo(id, (result) => {
-      res.send(JSON.stringify(result));
+    client.get(id, (err, redires) => {
+      if (redires) {
+        const reply = JSON.stringify(redires);
+        res.send(reply);
+      } else {
+        db.selectListingInfo(id, (result) => {
+          res.send(JSON.stringify(result));
+        });
+      }
     });
   });
 
@@ -107,7 +148,7 @@ if (cluster.isMaster) {
     });
   });
 
-  app.listen(3001, () => {
-    console.log('Server started on 3001');
+  app.listen(port, () => {
+    console.log(`server listening on ${port}`);
   });
 }
