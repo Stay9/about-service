@@ -20,21 +20,8 @@ services:
       volumes:
         - redis-data:/data
 
-
 networks:
   redis-net:
 
 volumes:
   redis-data:
-
-
-  # database:
-  #   build: ./db/
-  #   image: mysql/mysql-server/5.7
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=dog
-  #     - MYSQL_DATABASE=rental_hosts
-  #     - MYSQL_USER=root
-  #   ports:
-  #     - 3306:3306
-

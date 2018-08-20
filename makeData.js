@@ -149,7 +149,7 @@ const makeListingData = (start, end, pathToFile) => {
 // makeListingData(1, 3000000, '/Users/henrygreen/Documents/datastorage/listing1.csv');
 // makeListingData(3000001, 6000000, '/Users/henrygreen/Documents/datastorage/listing2.csv');
 // makeListingData(6000001, 8000000, '/Users/henrygreen/Documents/datastorage/listing3.csv');
-// makeListingData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/listing4.csv');
+makeListingData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/cassdata/listing4.csv');
 
 const makeReviewData = (start, end, pathToFile) => {
   // Data generation plan:

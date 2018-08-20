@@ -45,9 +45,11 @@ class App extends React.Component {
 
   getHostInfo() {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    $.get(`http://localhost:3001/api/about/hosts/${this.state.id}`, (data) => {
+    $.get(`http://${window.location.hostname}:3001/api/about/hosts/${this.state.id}`, (data) => {
       data = JSON.parse(data);
       data = data.rows[0];
+      console.log(data);
+      this.setState({ first_name: data.first_name });
       this.setState({ verified: data.verified });
       this.setState({ languages: data.languages });
       this.setState({ id: data.id });
@@ -57,14 +59,14 @@ class App extends React.Component {
   }
 
   getReviewInfo() {
-    $.get(`http://localhost:3001/api/about/reviews/${this.state.id}`, (data) => {
+    $.get(`${window.location.hostname}:3001/api/about/reviews/${this.state.id}`, (data) => {
       const formattedData = JSON.parse(data);
       this.setState({ numsOfReviews: formattedData.rows[0].numReviews });
     });
   }
 
   getNeighborhoodInfo() {
-    $.get(`http://localhost:3001/api/about/listings/${this.state.listingId}`, (data) => {
+    $.get(`${window.location.hostname}:3001/api/about/listings/${this.state.listingId}`, (data) => {
       const neighborhoodInfo = JSON.parse(data);
       const lon_location = neighborhoodInfo.rows[0].lon_location;
       const lat_location = neighborhoodInfo.rows[0].lat_location;

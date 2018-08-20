@@ -30,6 +30,7 @@ if (cluster.isMaster) {
   const app = express();
   console.log(`Worker ${process.pid} started`);
 
+
   app.use(bodyParser.json());
 
   app.use((req, res, next) => {
