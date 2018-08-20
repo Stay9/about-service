@@ -7,7 +7,7 @@ const makeQuery = (searchBy, params, callback) => {
 };
 
 const selectHostInfo = (id, callback) => {
-  const query = 'select verified, languages, join_in_date from hosts where id =?';
+  const query = 'select verified, languages, join_in_date, first_name from hosts where id =?';
   const params = [id];
   makeQuery(query, params, callback);
 };
