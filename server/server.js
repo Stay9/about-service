@@ -13,9 +13,9 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '../public'), { maxAge: 3000 }));
+
+app.use('/', express.static(path.join(__dirname, '../public'), { maxAge: 3000 }));
 
 app.get('/api/about/hosts/:id', (req, res) => {
   db.selectHostInfo(req.params.id, (result) => {
