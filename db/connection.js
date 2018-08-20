@@ -1,6 +1,6 @@
 const cassandra = require('cassandra-driver');
 
-const client = new cassandra.Client({ contactPoints: ['localhost'], keyspace: 'rental_hosts' });
+const client = new cassandra.Client({ contactPoints: ['18.191.157.11'], keyspace: 'rental_hosts' });
 
 
 const callQuery = (query, params, callback) => {

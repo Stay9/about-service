@@ -160,7 +160,7 @@ const makeListingData = (start, end, pathToFile) => {
   });
 };
 // makeListingData(1, 4000000, '/Users/henrygreen/Documents/datastorage/casslisting1.csv');
-// makeListingData(4000001, 8000000, '/Users/henrygreen/Documents/datastorage/casslisting2.csv');
+makeListingData(4000001, 8000000, '/Users/henrygreen/Documents/datastorage/casslisting2.csv');
 // makeListingData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/casslisting3.csv');
 // ----makeListingData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/listing4.csv');
 

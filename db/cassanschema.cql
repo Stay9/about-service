@@ -1,6 +1,5 @@
 -- DROP KEYSPACE IF EXISTS rental_hosts;
--- CREATE KEYSPACE rental_hosts 
--- with replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+CREATE KEYSPACE rental_hosts with replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 
 USE rental_hosts;
 
