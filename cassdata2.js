@@ -112,7 +112,7 @@ const makeHostData = (start, end, pathToFile) => {
 };
 // makeHostData(1, 4000000, '/Users/henrygreen/Documents/datastorage/casshost1.csv');
 // makeHostData(4000001, 7000000, '/Users/henrygreen/Documents/datastorage/casshost2.csv');
-// makeHostData(7000001, 10000000, '/Users/henrygreen/Documents/datastorage/casshost3.csv');
+makeHostData(7000001, 10000000, '/Users/henrygreen/Documents/datastorage/casshost3.csv');
 // --- makeHostData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/casshost4.csv');
 
 const thingsToDoChooser = function(){
