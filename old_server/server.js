@@ -4,10 +4,9 @@ const numCPUs = require('os').cpus().length;
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const redis = require('redis');
 const db = require('../db/queries.js');
-
-const port = process.env.PORT || 3001;
+const redis = require('redis');
+const port = process.env.PORT || 3000;
 
 const client = redis.createClient();
 client.on('error', (err) => {
@@ -49,7 +48,6 @@ if (cluster.isMaster) {
         const reply = JSON.stringify(redires);
         res.send(reply);
       } else {
-        console.log('inside get after redis');
         db.selectHostInfo(req.params.id, (result) => {
           let key = JSON.stringify(req.params.id);
           let val = JSON.stringify(result);

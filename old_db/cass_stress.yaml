@@ -1,0 +1,82 @@
+
+keyspace: stresscql
+keyspace_definition: |
+  CREATE KEYSPACE stresscql WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+#
+# Table info
+#
+
+table: listing_firstname
+table_definition: |
+
+  CREATE TABLE listing_firstname (
+  first_name text,
+  list_id int,
+  PRIMARY KEY (first_name));
+
+columnspec:
+  - name: first_name
+    population: uniform(1..10000000)
+  - name: list_id int
+    size: uniform(1..10000000)
+
+insert:
+  partitions: uniform(1..5)
+  batchtype: LOGGED
+  select: uniform(1..10)/10
+
+queries:
+  singlepost:
+    cql: select * from listing_firstname where first_name = ? LIMIT 100
+    fields: samerow
+
+# ### To run a separate test, uncomment the lines below and
+# ### comment out the lines above through table.
+
+# table: hosts
+# table_definition: |
+#   CREATE TABLE hosts (
+#   id int,
+#   first_name text,
+#   last_name text,
+#   join_in_date TEXT,
+#   email text,
+#   verified boolean,
+#   references_count int,
+#   response_rate decimal,
+#   response_time int,
+#   languages text,
+#   photo_url text,
+#   city text,
+#   state text,
+#   country text,
+#   PRIMARY KEY (id));
+# columnspec: 
+#   - name: id
+#     population: gaussian(1..10000000)
+#   - name: first_name
+#     size: uniform(10..30)
+#   - name: last_name
+#     size: uniform(10..30)
+#   - name: join_in_date
+#     size: uniform(10..15)
+#   - name: email
+#     size: fixed(30)
+#   - name: verified
+#     size: fixed(2)
+#   - name: references_count
+#     size: uniform(0..5)
+#   - name: response_rate
+#     size: uniform(0..5)
+#   - name: response_time
+#     size: uniform(0..5)
+#   - name: languages
+#     size: fixed(30)
+#   - name: photo_url
+#     size: fixed(200)
+#   - name: city
+#     size: fixed(50)
+#   - name: state
+#     size: uniform(10..20)
+#   - name: country
+#     size: fixed(30)

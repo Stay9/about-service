@@ -4,9 +4,8 @@ const numCPUs = require('os').cpus().length;
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const redis = require('redis');
 const db = require('../db/queries.js');
-
+const redis = require('redis');
 const port = process.env.PORT || 3001;
 
 const client = redis.createClient();
@@ -32,7 +31,7 @@ if (cluster.isMaster) {
   console.log(`Worker ${process.pid} started`);
 
 
-  app.use(bodyParser.json());
+app.use(bodyParser.json());
 
   app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -49,7 +48,6 @@ if (cluster.isMaster) {
         const reply = JSON.stringify(redires);
         res.send(reply);
       } else {
-        console.log('inside get after redis');
         db.selectHostInfo(req.params.id, (result) => {
           let key = JSON.stringify(req.params.id);
           let val = JSON.stringify(result);
@@ -60,7 +58,8 @@ if (cluster.isMaster) {
     });
   });
 
-  app.get('/api/about/reviews/:listingId', (req, res) => {
+
+app.get('/api/about/reviews/:listingId', (req, res) => {
     const request = req.params.id;
     client.get(request, (err, redires) => {
       if (redires) {
@@ -76,6 +75,8 @@ if (cluster.isMaster) {
       }
     });
   });
+
+
 
   app.get('/api/about/neighborhood/:listingId', (req, res) => {
     const request = req.params.id;
@@ -150,8 +151,8 @@ if (cluster.isMaster) {
       }
     });
   });
-
-  app.listen(port, () => {
+app.listen(port, () => {
     console.log(`server listening on ${port}`);
   });
 }
+    

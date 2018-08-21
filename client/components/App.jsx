@@ -3,7 +3,7 @@ import $ from 'jquery';
 import HostInfo from './HostInfo.jsx';
 import HostDescription from './HostDescription.jsx';
 import ContactAirbnb from './AlwaysContactAbnb.jsx';
-import Neighborhood from './Neighborhood.jsx';
+import neighborhood from './neighborhood.jsx';
 import GoogleMap from './Map.jsx';
 import CSSModules from 'react-css-modules';
 import styles from './css/styles.css';
@@ -45,10 +45,9 @@ class App extends React.Component {
 
   getHostInfo() {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    $.get(`http://${window.location.hostname}:3001/api/about/hosts/${this.state.id}`, (data) => {
+    $.get(`http://ec2-35-160-144-183.us-west-2.compute.amazonaws.com:3001/api/about/hosts/${this.state.id}`, (data) => {
       data = JSON.parse(data);
       data = data.rows[0];
-      console.log(data);
       this.setState({ first_name: data.first_name });
       this.setState({ verified: data.verified });
       this.setState({ languages: data.languages });
@@ -57,16 +56,16 @@ class App extends React.Component {
       this.setState({ joinYear: this.state.joined_in_date.split('-')[0] });
     });
   }
-
+// http://172.31.91.255
   getReviewInfo() {
-    $.get(`${window.location.hostname}:3001/api/about/reviews/${this.state.id}`, (data) => {
+    $.get(`http://ec2-35-160-144-183.us-west-2.compute.amazonaws.com:3001/api/about/reviews/${this.state.id}`, (data) => {
       const formattedData = JSON.parse(data);
       this.setState({ numsOfReviews: formattedData.rows[0].numReviews });
     });
   }
 
   getNeighborhoodInfo() {
-    $.get(`${window.location.hostname}:3001/api/about/listings/${this.state.listingId}`, (data) => {
+    $.get(`http://ec2-35-160-144-183.us-west-2.compute.amazonaws.com:3001/api/about/listings/${this.state.listingId}`, (data) => {
       const neighborhoodInfo = JSON.parse(data);
       const lon_location = neighborhoodInfo.rows[0].lon_location;
       const lat_location = neighborhoodInfo.rows[0].lat_location;
@@ -85,7 +84,7 @@ class App extends React.Component {
     return (
       <div>
         <span styleName='title'>Hosted By {this.state.first_name}</span>
-        <span><img styleName='hostImg' src={this.state.photo_url}/></span>
+        { /*<span><img styleName='hostImg' src={this.state.photo_url}/></span>*/ }
         <HostInfo city={this.state.city} state={this.state.state} joinMonth={this.state.joinMonth} joinYear={this.state.joinYear} reviews={this.state.numsOfReviews} reviewWording={this.state.reviewWording} verifiedOrNot={this.state.verified} />
         <HostDescription response_rate={this.state.response_rate} resonse_time={this.state.response_time} description={this.state.description} host={this.state.host} city={this.state.city} state={this.state.state} country={this.state.country} responseTimeConvertor={this.responseTimeConvertor} languages={this.state.languages} />
         <ContactAirbnb />

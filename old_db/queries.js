@@ -12,15 +12,6 @@ const selectHostInfo = (id, callback) => {
   makeQuery(query, params, callback);
 };
 
-// selectHostInfo(55, (a, b) => {
-//   if (a) {
-//     console.log('a', a);
-//   }
-//   if (b) {
-//     console.log('b', b);
-//   }
-// });
-
 const selectListingInfo = (id, callback) => {
   const query = 'select lat_location, lon_location, city, state, photo_url, description from listings where id = ?';
   const params = [id];
