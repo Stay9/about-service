@@ -1,4 +1,5 @@
-require('newrelic');
+// Note: new relic filepath meant for deployment now.
+require('../../newrelic');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const express = require('express');
