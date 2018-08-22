@@ -65,11 +65,11 @@ if (cluster.isMaster) {
     const request = req.params.id;
     client.get(request, (err, redires) => {
       if (redires) {
-        const reply = JSON.stringify(redires);
+        const reply = JSON.parse(redires);
         res.send(reply);
       } else {
         db.reviewsForHost(req.params.listingId, (result) => {
-          const key = JSON.stringify(req.params.id);
+          const key = req.params.id;
           const val = JSON.stringify(result);
           client.setex(key, 60, val);
           res.send(JSON.stringify(result));
