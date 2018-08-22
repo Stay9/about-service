@@ -1,5 +1,5 @@
 // Note: new relic filepath meant for deployment now.
-require('../../newrelic');
+require('newrelic');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const express = require('express');
@@ -51,10 +51,7 @@ if (cluster.isMaster) {
         const reply = JSON.parse(redires);
         res.send(reply);
       } else {
-        db.selectHostInfo(req.params.id, (err, result) => {
-          if (err) {
-            console.log('error', err);
-          }
+        db.selectHostInfo(req.params.id, (result) => {
           const key = request;
           const val = JSON.stringify(result);
           client.setex(key, 60, val);
