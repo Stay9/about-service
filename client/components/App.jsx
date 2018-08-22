@@ -60,7 +60,7 @@ class App extends React.Component {
   getReviewInfo() {
     $.get(`http://ec2-35-160-144-183.us-west-2.compute.amazonaws.com:3001/api/about/reviews/${this.state.id}`, (data) => {
       const formattedData = JSON.parse(data);
-      this.setState({ numsOfReviews: formattedData.rows[0].numReviews });
+      //this.setState({ numsOfReviews: formattedData.rows[0].numReviews });
     });
   }
 
