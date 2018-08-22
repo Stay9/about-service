@@ -62,7 +62,7 @@ if (cluster.isMaster) {
   });
 
   app.get('/api/about/reviews/:listingId', (req, res) => {
-    const request = req.params.id;
+    const request = req.params.listingId;
     client.get(request, (err, redires) => {
       if (redires) {
         const reply = JSON.parse(redires);
@@ -79,7 +79,7 @@ if (cluster.isMaster) {
   });
 
   app.get('/api/about/neighborhood/:listingId', (req, res) => {
-    const request = req.params.id;
+    const request = req.params.listingId;
     client.get(request, (err, redires) => {
       if (redires) {
         const reply = JSON.stringify(redires);
