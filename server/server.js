@@ -45,15 +45,15 @@ if (cluster.isMaster) {
   app.use(express.static(path.join(__dirname, '../public'), { maxAge: 3000 }));
 
   app.get('/api/about/hosts/:id', (req, res) => {
-    client.get(req.params.id, (err, redires) => {
+    const request = req.params.id;
+    client.get(request, (err, redires) => {
       if (redires) {
         const reply = JSON.stringify(redires);
         res.send(reply);
       } else {
-        console.log('inside get after redis');
         db.selectHostInfo(req.params.id, (result) => {
-          let key = JSON.stringify(req.params.id);
-          let val = JSON.stringify(result);
+          const key = JSON.stringify(req.params.id);
+          const val = JSON.stringify(result);
           client.setex(key, 60, val);
           res.send(JSON.stringify(result));
         });
@@ -83,7 +83,6 @@ if (cluster.isMaster) {
     client.get(request, (err, redires) => {
       if (redires) {
         const reply = JSON.stringify(redires);
-        console.log('in redires', reply);
         res.send(reply);
       } else {
         db.neighborhoodInfo(req.params.listingId, (err, result) => {
