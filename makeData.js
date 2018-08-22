@@ -1,7 +1,7 @@
 'use strict'
 
-const faker = require('faker');
-const axios = require('axios');
+//const faker = require('faker');
+// const axios = require('axios');
 const fs = require('fs');
 const Path = require('path');
 
@@ -149,7 +149,7 @@ const makeListingData = (start, end, pathToFile) => {
 // makeListingData(1, 3000000, '/Users/henrygreen/Documents/datastorage/listing1.csv');
 // makeListingData(3000001, 6000000, '/Users/henrygreen/Documents/datastorage/listing2.csv');
 // makeListingData(6000001, 8000000, '/Users/henrygreen/Documents/datastorage/listing3.csv');
-makeListingData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/cassdata/listing4.csv');
+// makeListingData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/cassdata/listing4.csv');
 
 const makeReviewData = (start, end, pathToFile) => {
   // Data generation plan:
@@ -183,41 +183,57 @@ const makeReviewData = (start, end, pathToFile) => {
 // makeReviewData(6000001, 8000000, '/Users/henrygreen/Documents/datastorage/review3.csv');
 // makeReviewData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/review4.csv');
 
-
-
+// JSON object for loader.io data.
+  let dataJSON = {
+    version: 1,
+    variables:[{
+      names:["id"],
+      values:[3]}
+    ]
+  }
+//let data = JSON.parse(dataJSON);
+console.log(dataJSON.variables[0].values);
 const makeFavoredIds = (pathToFile) => {
   // Data generation plan:
   const stream = fs.createWriteStream(pathToFile);
   const arrNums = [];
-  for (let idx = 0; idx < 50000; idx++) {
+  for (let idx = 0; idx < 50000; idx += 1) {
     let rando = Math.random();
-    // 50 % chance that one of the top 1000 will be picked.
-    if (rando > 0.5) {
-      let subFrom10M = Math.floor(Math.random() * 1000);
-      let insertion = 10000000 - subFrom10M;
-      arrNums.push(insertion);
+    let insertion;
+    // 40 % chance that one of the top 1000 will be picked.
+    if (rando > 0.6) {
+      const subFrom10M = Math.floor(Math.random() * 1000);
+      insertion = 10000000 - subFrom10M;
+      //arrNums.push(insertion);
+    } else if (rando > 0.5) {
+      // 10 % chance that one of the next 9000 will be picked
+      const subFrom = Math.floor(Math.random() * 10000);
+      insertion = 9999000 - subFrom;
+      // arrNums.push(insertion);
     } else if (rando > 0.3) {
-    // 20 % chance that one of the next 9000 will be picked
-      let subFrom = Math.floor(Math.random() * 10000);
-      let insertion = 9999000 - subFrom;
-      arrNums.push(insertion);
+      // 20% chance that it's > 8,000,000.
+      const subFrom = Math.floor(Math.random() * 2000000);
+      insertion = 10000000 - subFrom;
+      // arrNums.push(insertion);
     } else {
-    // 30 % chance that any other number will be picked.
-      let insertion = Math.ceil(Math.random() * 9990000);
-      arrNums.push(insertion);
+      // 30 % chance that any other number will be picked.
+      insertion = Math.ceil(Math.random() * 8000000);
+      // arrNums.push(insertion);
     }
+    dataJSON.variables[0].values.push([insertion]);
   }
   // write each number into a csv.
+
   const str1 = 'num';
   stream.once('open', (fd) => {
-    stream.write(str1 + '\n');
-    for (let idx = 0; idx < arrNums.length; idx++) {
-      stream.write(arrNums[idx] + '\n');
-    }
+    stream.write(JSON.stringify(dataJSON));
+    //stream.write(str1 + '\n');
+
+    // for (let idx = 0; idx < arrNums.length; idx++) {
+    //   stream.write(arrNums[idx] + '\n');
+    // }
     stream.end();
   });
 };
 
-// makeFavoredIds('/Users/henrygreen/Documents/datastorage/highIdxData.csv');
-
-
+makeFavoredIds('/Users/henrygreen/Documents/datastorage/loaderIds.csv');

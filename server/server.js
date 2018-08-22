@@ -83,6 +83,7 @@ if (cluster.isMaster) {
     client.get(request, (err, redires) => {
       if (redires) {
         const reply = JSON.stringify(redires);
+        console.log('in redires', reply);
         res.send(reply);
       } else {
         db.neighborhoodInfo(req.params.listingId, (err, result) => {
