@@ -1,5 +1,5 @@
 // Note: new relic filepath meant for deployment now.
-require('../../newrelic');
+require('newrelic');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const express = require('express');
@@ -19,7 +19,7 @@ if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
 
   // fork workers
-  for (let i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < numCPUs; i += 1) {
     cluster.fork();
   }
 

@@ -5,7 +5,7 @@
   "main": "bundle.js",
   "scripts": {
     "test": "jest",
-    "build": "webpack -d",
+    "build": "webpack -p",
     "start": "node ./server/server.js",
     "prod": "webpack --config webpack.prod.js"
   },
