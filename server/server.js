@@ -62,7 +62,7 @@ if (cluster.isMaster) {
           if (val === 'undefined') {
             val = 'undefined';
           }
-          client.setex(key, 60, val);
+          client.setex(key, 600, val);
           res.send(result);
         });
       }
