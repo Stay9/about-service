@@ -54,8 +54,14 @@ if (cluster.isMaster) {
         res.send(reply);
       } else {
         db.selectHostInfo(req.params.id, (result) => {
-          const key = request;
-          const val = JSON.stringify(result);
+          let key = request;
+          let val = JSON.stringify(result);
+          if (key === undefined) {
+            key = 'undefined';
+          }
+          if (val === 'undefined') {
+            val = 'undefined';
+          }
           client.setex(key, 60, val);
           res.send(result);
         });
