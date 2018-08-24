@@ -184,6 +184,7 @@ const makeReviewData = (start, end, pathToFile) => {
 // makeReviewData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/review4.csv');
 
 // JSON object for loader.io data.
+
 const dataJSON = {
   version: 1,
   variables:[{
@@ -191,6 +192,7 @@ const dataJSON = {
     values:[]}
   ],
 };
+
 //let data = JSON.parse(dataJSON);
 console.log(dataJSON.variables[0].values);
 const makeFavoredIds = (pathToFile) => {
@@ -201,16 +203,16 @@ const makeFavoredIds = (pathToFile) => {
     let rando = Math.random();
     let insertion;
     // 40 % chance that one of the top 1000 will be picked.
-    if (rando > 0.6) {
+    if (rando > 0.35) {
       const subFrom10M = Math.floor(Math.random() * 1000);
       insertion = 10000000 - subFrom10M;
       //arrNums.push(insertion);
-    } else if (rando > 0.5) {
+    } else if (rando > 0.2) {
       // 10 % chance that one of the next 9000 will be picked
       const subFrom = Math.floor(Math.random() * 10000);
       insertion = 9999000 - subFrom;
       // arrNums.push(insertion);
-    } else if (rando > 0.3) {
+    } else if (rando > 0.2) {
       // 20% chance that it's > 8,000,000.
       const subFrom = Math.floor(Math.random() * 2000000);
       insertion = 10000000 - subFrom;
@@ -236,4 +238,4 @@ const makeFavoredIds = (pathToFile) => {
   });
 };
 
-makeFavoredIds('/Users/henrygreen/Documents/datastorage/loaderIds.csv');
+makeFavoredIds('/Users/henrygreen/Documents/datastorage/loaderIds.JSON');

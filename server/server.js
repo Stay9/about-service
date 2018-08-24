@@ -36,6 +36,7 @@ if (cluster.isMaster) {
 
 
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
 
   app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -43,31 +44,30 @@ if (cluster.isMaster) {
     next();
   });
 
-  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(express.static(path.join(__dirname, '../public'), { maxAge: 3000 }));
 
   app.get('/api/about/hosts/:id', (req, res) => {
     const request = req.params.id;
     client.get(request, (err, redires) => {
       if (redires) {
-        const reply = JSON.stringify(redires);
+        const reply = JSON.parse(redires);
         res.send(reply);
       } else {
         db.selectHostInfo(req.params.id, (result) => {
-          const key = JSON.stringify(req.params.id);
+          const key = request;
           const val = JSON.stringify(result);
           client.setex(key, 60, val);
-          res.send(JSON.stringify(result));
+          res.send(result);
         });
       }
     });
   });
 
   app.get('/api/about/reviews/:listingId', (req, res) => {
-    const request = req.params.id;
+    const request = req.params.listingId;
     client.get(request, (err, redires) => {
       if (redires) {
-        const reply = JSON.stringify(redires);
+        const reply = JSON.parse(redires);
         res.send(reply);
       } else {
         db.reviewsForHost(req.params.listingId, (result) => {
@@ -81,7 +81,7 @@ if (cluster.isMaster) {
   });
 
   app.get('/api/about/neighborhood/:listingId', (req, res) => {
-    const request = req.params.id;
+    const request = req.params.listingId;
     client.get(request, (err, redires) => {
       if (redires) {
         const reply = JSON.stringify(redires);
