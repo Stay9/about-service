@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "webpack -p",
-    "start": "node ./server/server.js",
+    "start": "NODE_ENV=production node ./server/server.js",
     "prod": "webpack --config webpack.prod.js"
   },
   "keywords": [],
@@ -21,6 +21,7 @@
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.18.3",
     "cassandra-driver": "^3.5.0",
+    "compression": "^1.7.3",
     "express": "^4.16.2",
     "faker": "^4.1.0",
     "google-map-react": "^1.0.5",
