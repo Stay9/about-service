@@ -5,6 +5,7 @@ const numCPUs = require('os').cpus().length;
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+var compression = require('compression');
 const redis = require('redis');
 const db = require('../db/queries.js');
 
@@ -19,7 +20,7 @@ if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
 
   // fork workers
-  for (let i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < numCPUs; i += 1) {
     cluster.fork();
   }
 
@@ -30,6 +31,7 @@ if (cluster.isMaster) {
   // Make works share a TCP connection
   // initialize with express
   const app = express();
+  app.use(compression());
   console.log(`Worker ${process.pid} started`);
 
 

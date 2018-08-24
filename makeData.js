@@ -184,13 +184,15 @@ const makeReviewData = (start, end, pathToFile) => {
 // makeReviewData(8000001, 10000000, '/Users/henrygreen/Documents/datastorage/review4.csv');
 
 // JSON object for loader.io data.
-  let dataJSON = {
-    version: 1,
-    variables:[{
-      names:["id"],
-      values:[]}
-    ]
-  }
+
+const dataJSON = {
+  version: 1,
+  variables:[{
+    names:["id"],
+    values:[]}
+  ],
+};
+
 //let data = JSON.parse(dataJSON);
 console.log(dataJSON.variables[0].values);
 const makeFavoredIds = (pathToFile) => {
